@@ -1,7 +1,10 @@
+from django.conf.urls import url
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import ManyToManyField
+from django.forms import Form
+from django.template.response import TemplateResponse
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
@@ -44,8 +47,22 @@ class Person(models.Model):
     def __str__(self):
         return self.full_name()
 
+    def get_urls(self):
+        urls = super(Person, self).get_urls()
+        my_urls = [
+            url(r'^my_view/$', self.admin_site.admin_view(self.my_view)),
+        ]
+        return my_urls + urls
+
+    def my_view(self, request):
+        context = dict(
+            self.admin_site.each_context(request),
+            text="TEXT",
+        )
+        return TemplateResponse(request, "template.html", context)
+
     def get_absolute_url(self):
-        return reverse('person_details', args=[str(self.id)])
+        return reverse('person_detail', args=[str(self.id)])
 
     full_name.short_description = "Full name"
 

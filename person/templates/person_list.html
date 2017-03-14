@@ -1,19 +1,23 @@
 {% for person in persons %}
-    {{ person.full_name }}<br/>
+    <a href="{% url "person_detail" person.pk %}">{{ person.full_name }}</a><br/>
 {% endfor %}
 
-<div class="pagination">
-    <span class="step-links">
-        {% if persons.has_previous %}
-            <a href="?page={{ persons.previous_page_number }}">{{ persons.previous_page_number }}</a>
-        {% endif %}
+{% if paginator.num_pages > 1 %}
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+            {% endif %}
 
-        <span class="current">
-            Page {{ persons.number }} of {{ persons.paginator.num_pages }}.
+            <span class="current">
+                Page {{ page_obj.number }} of {{ paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+            {% endif %}
         </span>
+    </div>
+{% endif %}
 
-        {% if persons.has_next %}
-            <a href="?page={{ persons.next_page_number }}">{{ persons.next_page_number }}</a>
-        {% endif %}
-    </span>
-</div>
+<a href="{% url "person_create" %}"><button>Add</button></a>

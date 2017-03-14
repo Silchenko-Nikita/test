@@ -1,1 +1,6 @@
-{{ person }}
+{{ person.colored_first_name }} ({{ person }})
+<a href="{% url "person_update" person.pk %}"><button>Update</button></a>
+<form action="{% url 'person_delete' pk=person.pk %}" method="post">
+    {% csrf_token %}
+    <button>Удалить</button>
+</form>

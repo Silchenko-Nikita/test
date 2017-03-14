@@ -1,8 +1,9 @@
 from django.contrib import admin
 
 # Register your models here.
-from person.models import Person
+from django.forms import Form, ModelForm
 
+from person.models import Person
 
 
 class PersonAdmin(admin.ModelAdmin):
@@ -18,11 +19,15 @@ class PersonAdmin(admin.ModelAdmin):
     preserve_filters = False
 
     change_list_template = "admin_person_list.html"
+    delete_confirmation_template = "admin_person_delete_confirm.html"
 
     # def changelist_view(self, request, extra_context=None):
     #     extra_context = extra_context or {}
     #     extra_context['osm_data'] = self.get_osm_info()
     #     return super(MyModelAdmin, self).change_view(request, object_id,
     #                                                  form_url, extra_context=extra_context)
+    # def get_changelist_form(self, request, **kwargs):
+    #     return PersonForm
+
 
 admin.site.register(Person, PersonAdmin)
